@@ -11,7 +11,7 @@ import os
 clf = pickle.load(open('models/model.pkl', 'rb'))
 
 data_path = os.path.join("data","features")
-test_data = pd.read_csv(os.path.join(data_path, 'test_bow.csv'))
+test_data = pd.read_csv(os.path.join(data_path, 'test_tfidf.csv'))
 
 X_test = test_data.iloc[:,0:-1].values
 y_test = test_data.iloc[:, -1].values

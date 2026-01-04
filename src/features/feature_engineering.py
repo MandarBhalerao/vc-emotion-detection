@@ -7,7 +7,7 @@ import nltk
 import string
 from nltk.corpus import stopwords
 from nltk.stem import SnowballStemmer, WordNetLemmatizer
-from sklearn.feature_extraction.text import CountVectorizer
+from sklearn.feature_extraction.text import TfidfVectorizer
 
 import yaml
 
@@ -54,15 +54,15 @@ def save_data(train_data: pd.DataFrame, test_data: pd.DataFrame, data_path: str)
     try:
         # data_path = os.path.join(data_path, 'processed')
         os.makedirs(data_path, exist_ok=True)
-        train_data.to_csv(os.path.join(data_path, "train_bow.csv"), index=False)
-        test_data.to_csv(os.path.join(data_path, "test_bow.csv"), index=False)
+        train_data.to_csv(os.path.join(data_path, "train_tfidf.csv"), index=False)
+        test_data.to_csv(os.path.join(data_path, "test_tfidf.csv"), index=False)
     except Exception as e:
         print(f"Error: An unexpected error occurred while saving the data.")
         print(e)
         raise   
     
-def apply_bow_vectorization(X_train,X_test, max_features):
-    vectorizer = CountVectorizer(max_features=max_features)
+def apply_tfidf_vectorization(X_train,X_test, max_features):
+    vectorizer = TfidfVectorizer(max_features=max_features)
     X_train_bow = vectorizer.fit_transform(X_train)
     X_test_bow = vectorizer.transform(X_test)
     return X_train_bow, X_test_bow
@@ -86,7 +86,7 @@ def main():
     X_test = test_data['content'].values
     y_test = test_data['sentiment'].values
     
-    X_train_bow, X_test_bow = apply_bow_vectorization(X_train,X_test, max_features)
+    X_train_bow, X_test_bow = apply_tfidf_vectorization(X_train,X_test, max_features)
 
     train_df = pd.DataFrame(X_train_bow.toarray())
     train_df['label'] = y_train
